@@ -7,14 +7,13 @@ from gpiozero import CPUTemperature
 def get_cpu_temperature():
     try:
         # Run the vcgencmd measure_temp command and capture the output
-        result = CPUTemperature()
-        temperature_output = result.stdout.strip()
+        temperature = CPUTemperature()
 
-        print(temperature_output)
+        print(temperature)
 
         # Extract the temperature value from the output
 
-        return temperature_output
+        return temperature
     except Exception as e:
         print("Error getting CPU temperature:", e)
         return None
