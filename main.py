@@ -1,7 +1,7 @@
-import subprocess
+import json
+from datetime import datetime
 import redis
 import schedule
-import time
 from gpiozero import CPUTemperature
 
 def get_cpu_temperature():
@@ -21,9 +21,17 @@ def add_temperature_to_redis(redis_host, redis_port, temperature):
         # Connect to the Redis server
         redis_client = redis.StrictRedis(host=redis_host, port=redis_port, decode_responses=True)
 
+        data = {
+            'time': str(datetime.now()),
+            'temperature': temperature
+        }
+
+        # Convert the data to a JSON string
+        json_data = json.dumps(data)
+
+        # Add the JSON entry to the Redis database
+        redis_client.rpush('temperatures', json_data)
         # Add the temperature entry to the Redis database
-        time_stamp = time.time()
-        redis_client.set(time_stamp, temperature)
         print(f"Temperature entry added to Redis: {temperature}°C")
     except Exception as e:
         print("Error adding temperature to Redis:", e)
@@ -40,6 +48,8 @@ def measure_and_store_temperature(redis_host, redis_port):
 if __name__ == "__main__":
     # Replace 'your_redis_host' and 'your_redis_port' with your Redis server details
     redis_host = 'localhost'
+    # redis_host = 'respberrypi.local'
+
     redis_port = 6379
 
     measure_and_store_temperature(redis_host, redis_port)
