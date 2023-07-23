@@ -2,7 +2,9 @@ import json
 from datetime import datetime
 import redis
 import schedule
+import time
 from gpiozero import CPUTemperature
+
 
 def get_cpu_temperature():
     try:
@@ -48,13 +50,15 @@ def measure_and_store_temperature(redis_host, redis_port):
 if __name__ == "__main__":
     # Replace 'your_redis_host' and 'your_redis_port' with your Redis server details
     redis_host = 'localhost'
+
+    # dev settings
     # redis_host = 'respberrypi.local'
 
     redis_port = 6379
 
     measure_and_store_temperature(redis_host, redis_port)
     # Schedule the measure_and_store_temperature function to run every 10 minutes
-    schedule.every(5).minutes.do(measure_and_store_temperature, redis_host, redis_port)
+    schedule.every(10).minutes.do(measure_and_store_temperature, redis_host, redis_port)
     #
     while True:
         # Run the scheduled tasks
