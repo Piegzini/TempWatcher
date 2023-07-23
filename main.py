@@ -7,11 +7,8 @@ from gpiozero import CPUTemperature
 def get_cpu_temperature():
     try:
         # Run the vcgencmd measure_temp command and capture the output
-        temperature = CPUTemperature()
-
-        print(temperature)
-
-        # Extract the temperature value from the output
+        raw_output = CPUTemperature()
+        temperature = raw_output.temperature
 
         return temperature
     except Exception as e:
@@ -47,9 +44,9 @@ if __name__ == "__main__":
 
     measure_and_store_temperature(redis_host, redis_port)
     # Schedule the measure_and_store_temperature function to run every 10 minutes
-    # schedule.every(10).minutes.do(measure_and_store_temperature, redis_host, redis_port)
+    schedule.every(5).minutes.do(measure_and_store_temperature, redis_host, redis_port)
     #
-    # while True:
-    #     # Run the scheduled tasks
-    #     schedule.run_pending()
-    #     time.sleep(1)
+    while True:
+        # Run the scheduled tasks
+        schedule.run_pending()
+        time.sleep(1)
