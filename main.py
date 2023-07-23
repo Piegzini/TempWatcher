@@ -43,7 +43,7 @@ def measure_and_store_temperature(redis_host, redis_port):
 
 if __name__ == "__main__":
     # Replace 'your_redis_host' and 'your_redis_port' with your Redis server details
-    redis_host = 'redisdatabase'
+    redis_host = 'localhost'
     redis_port = 6379
 
     measure_and_store_temperature(redis_host, redis_port)
