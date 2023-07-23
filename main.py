@@ -2,21 +2,19 @@ import subprocess
 import redis
 import schedule
 import time
-
+from gpiozero import CPUTemperature
 
 def get_cpu_temperature():
     try:
         # Run the vcgencmd measure_temp command and capture the output
-        # result = subprocess.run(['vcgencmd', 'measure_temp'], capture_output=True, text=True)
-        # temperature_output = result.stdout.strip()
+        result = CPUTemperature()
+        temperature_output = result.stdout.strip()
 
-        temperature_output = 'temp=53.4\'C'
         print(temperature_output)
 
         # Extract the temperature value from the output
 
-        temperature = float(temperature_output.replace("temp=", "").replace("'C", ""))
-        return temperature
+        return temperature_output
     except Exception as e:
         print("Error getting CPU temperature:", e)
         return None
